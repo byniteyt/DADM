@@ -22,7 +22,8 @@ android {
     buildTypes {
         release {
             optimization {
-                enable = false
+                enable = true
+                packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
         }
     }
@@ -36,6 +37,8 @@ android {
 }
 
 dependencies {
+    implementation("androidx.navigation:navigation-compose:2.7.3")
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3)

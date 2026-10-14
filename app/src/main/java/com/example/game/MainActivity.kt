@@ -6,10 +6,9 @@ import kotlinx.coroutines.delay
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.foundation.Image
-import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
@@ -41,6 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.game.ui.theme.GameTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +50,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            JuegoApp()
+            /*
             GameTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
@@ -55,12 +59,25 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
-            }
+            }*/
         }
     }
 }
+@Composable()
+fun JuegoApp(){
+    val navController= rememberNavController()
+    NavHost(navController=navController, startDestination = "Inicio"){
+        composable("Inicio"){ PantallaInicio(navController) }
+        composable("Juego"){ PantallaJuego(navController) }
+    }
+
+}
+
+
+/*
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
+
     val context = LocalContext.current
 
     val preguntas = remember {
@@ -101,24 +118,12 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         val pregunta = partes[0]
         val respuestas = partes.subList(1, 5)
         val correcta = partes[5].toInt()
-        val imagen = partes[6]
 
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(
-                painter = painterResource(
-                    when (imagen) {
-                        "alfonso" -> R.drawable.alfonso
-                        "dafoe" -> R.drawable.dafoe
-                        "josh" -> R.drawable.josh
-                        else -> R.drawable.alfonso
-                    }
-                ),
-                contentDescription = imagen
-            )
 
             Text(
                 pregunta,
@@ -185,7 +190,8 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-GameTheme {
-Greeting("Android")
+    GameTheme {
+        Greeting("Android")
+    }
 }
-}
+*/
