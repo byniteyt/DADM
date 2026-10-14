@@ -6,9 +6,10 @@ import kotlinx.coroutines.delay
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.Image
+import androidx.compose.ui.res.painterResource
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.Column
@@ -60,7 +61,6 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
-
     val context = LocalContext.current
 
     val preguntas = remember {
@@ -101,12 +101,24 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         val pregunta = partes[0]
         val respuestas = partes.subList(1, 5)
         val correcta = partes[5].toInt()
+        val imagen = partes[6]
 
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Image(
+                painter = painterResource(
+                    when (imagen) {
+                        "alfonso" -> R.drawable.alfonso
+                        "dafoe" -> R.drawable.dafoe
+                        "josh" -> R.drawable.josh
+                        else -> R.drawable.alfonso
+                    }
+                ),
+                contentDescription = imagen
+            )
 
             Text(
                 pregunta,
