@@ -68,7 +68,10 @@ fun PantallaJuego(navController : NavController){
     var respondida by remember {
         mutableStateOf(false)
     }
-
+    //variable para el tiempo
+    var tiempoRestante by remember {
+        mutableStateOf(10)
+    }
     // Espera 1 segundo después de responder
     LaunchedEffect(respondida) {
         if (respondida) {
@@ -77,7 +80,24 @@ fun PantallaJuego(navController : NavController){
                 seleccionado[i] = -1
             }
             preguntaActual++
+            tiempoRestante = 10
             respondida = false
+        }
+    }
+    //evento del temporizador, me daba errores al intentar hacerlo de una
+    LaunchedEffect(preguntaActual, respondida) {
+        if (!respondida) {
+            while (tiempoRestante > 0) {
+                delay(1000L) // Espera 1 segundo
+                tiempoRestante--
+            }
+            if (tiempoRestante == 0) {
+                val partes = preguntas[preguntaActual].split("|")
+                val correcta = partes[5].toInt()
+
+                seleccionado[correcta] = 1
+                respondida = true
+            }
         }
     }
 
@@ -100,7 +120,11 @@ fun PantallaJuego(navController : NavController){
                 modifier = Modifier.padding(20.dp),
                 textAlign = TextAlign.Center
             )
-
+            Text(
+                text = "Tiempo: $tiempoRestante",
+                color = if (tiempoRestante <= 3) Color.Red else Color.Unspecified,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
             for (j in 0..1) {
                 Row {
                     for (i in 0..1) {
