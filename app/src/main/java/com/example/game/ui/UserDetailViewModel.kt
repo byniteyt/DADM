@@ -1,5 +1,6 @@
 package com.example.game.ui
 
+import android.R
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -12,9 +13,9 @@ import kotlinx.coroutines.launch
 
 class UserDetailViewModel(
     private val userRepository: OfflineUsersRepository,
-    userName: String
+    userId: Int
     ): ViewModel() {
-    val user: StateFlow<User?> = userRepository.getUserStream(userName)
+    val user: StateFlow<User?> = userRepository.getUser(userId)
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
@@ -35,20 +36,19 @@ class UserDetailViewModel(
         val currentUser = user.value?: return
         viewModelScope.launch {
             userRepository.deleteUser(currentUser)
-            onDeleted()
         }
     }
 }
 
 class UserDetailViewModelFactory(
     private val userRepository: OfflineUsersRepository,
-    val userName: String
+    val userId: Int
 ): ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(UserDetailViewModel::class.java)){
             @Suppress("UNCHECKED_CAST")
-            return UserDetailViewModel(userRepository, userName) as T
+            return UserDetailViewModel(userRepository, userId) as T
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+        throw IllegalArgumentException("Unknow ViewModel class")
     }
 }

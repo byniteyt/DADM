@@ -7,6 +7,6 @@ plugins {
 
 buildscript {
     extra.apply {
-        set("room_version", "2.7.0")
+        set("room_version", "2.6.0")
     }
 }

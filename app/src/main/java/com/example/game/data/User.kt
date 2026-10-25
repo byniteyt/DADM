@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName ="Users")
 data class User (
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val userName: String,
     val bestScore: Double,
     val points: Int

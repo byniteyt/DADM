@@ -1,5 +1,6 @@
 package com.example.game
 
+import android.os.Bundle
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.fillMaxWidth
 
 import androidx.compose.material3.Text
 import androidx.compose.material3.Button
@@ -24,24 +24,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
-import com.example.game.data.UserRepository
-
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.game.ui.theme.GameTheme
 @Composable
-fun PantallaJuego(navController: NavController,
-                  userRepository: UserRepository,
-                  nombreUsuario: String){
+fun PantallaJuego(navController : NavController){
 
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
+
     val preguntas = remember {
         context.resources
             .openRawResource(R.raw.preguntas)
@@ -50,9 +50,7 @@ fun PantallaJuego(navController: NavController,
             .split(";")
             .filter { it.isNotBlank() }
     }
-    var points by remember {
-        mutableStateOf(0)
-    }
+
     var preguntaActual by remember {
         mutableStateOf(0)
     }
@@ -70,29 +68,22 @@ fun PantallaJuego(navController: NavController,
     LaunchedEffect(respondida) {
         if (respondida) {
             delay(1000)
-
-            if (preguntaActual < preguntas.size - 1) {
-                for (i in 0..3) {
-                    seleccionado[i] = -1
-                }
-
-                preguntaActual++
-                tiempoRestante = 10
-                respondida = false
+            for (i in 0..3) {
+                seleccionado[i] = -1
             }
+            preguntaActual++
+            tiempoRestante = 10
+            respondida = false
         }
     }
     //evento del temporizador, me daba errores al intentar hacerlo de una
     LaunchedEffect(preguntaActual, respondida) {
-        if (!respondida && preguntaActual < preguntas.size) {
-            while (tiempoRestante > 0 && !respondida) {
-                delay(1000L)
+        if (!respondida) {
+            while (tiempoRestante > 0) {
+                delay(1000L) // Espera 1 segundo
                 tiempoRestante--
             }
-
-            if (tiempoRestante == 0 && !respondida &&
-                preguntaActual < preguntas.size
-            ) {
+            if (tiempoRestante == 0) {
                 val partes = preguntas[preguntaActual].split("|")
                 val correcta = partes[5].toInt()
 
@@ -150,7 +141,6 @@ fun PantallaJuego(navController: NavController,
                                 if (!respondida) {
                                     seleccionado[boton]++;
                                     if (boton == correcta){
-                                        points +=(1+tiempoRestante);
                                         seleccionado[boton]++;
                                     }
                                     else{
@@ -182,18 +172,6 @@ fun PantallaJuego(navController: NavController,
         }
 
     } else {
-        LaunchedEffect(Unit) {
-            val usuario = userRepository.getUser(nombreUsuario)
-
-            if (usuario != null) {
-                val usuarioActualizado = usuario.copy(
-                    points = usuario.points + points,
-                    bestScore = maxOf(usuario.bestScore, points.toDouble())
-                )
-
-                userRepository.updateUser(usuarioActualizado)
-            }
-        }
 
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -201,21 +179,9 @@ fun PantallaJuego(navController: NavController,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "¡No quedan más preguntas!\nHas conseguido $points puntos",
+                "¡No quedan más preguntas!",
                 textAlign = TextAlign.Center
             )
-            Button(
-                onClick = {
-                    navController.navigate("Inicio/$nombreUsuario") {
-                        popUpTo("Juego/$nombreUsuario"){
-                            inclusive = true
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Volver al menú de inicio")
-            }
         }
     }
 }
