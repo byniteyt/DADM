@@ -6,26 +6,121 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.game.data.UserRepository
+import kotlinx.coroutines.launch
 
 @Composable
-fun PantallaInicio(navController : NavController){
+fun PantallaInicio(navController: NavController,
+                   userRepository: UserRepository, userName: String) {
+
+    val scope = rememberCoroutineScope()
+    var mostrarConfirmacion by remember {
+        mutableStateOf(false)
+    }
+
     Column(
-        modifier=Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Text("Bienvenido a nuestro juego", style = MaterialTheme.typography.headlineSmall)
-        Spacer(modifier= Modifier.height(24.dp))
-        Button(onClick = {navController.navigate("Juego")}) { Text("PLAY") }
+    ) {
 
+        Text(
+            text = "Bienvenido a nuestro juego\n$userName",
+            style = MaterialTheme.typography.headlineSmall
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = {
+                navController.navigate("Juego/$userName")
+            }
+        ) {
+            Text("PLAY")
+        }
+
+        Button(
+            onClick = {
+                navController.navigate("Ranking/$userName")
+            }
+        ) {
+            Text("Ver ranking")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                mostrarConfirmacion = true
+            }
+        ) {
+            Text("Eliminar jugador")
+        }
+    }
+
+    // Panel de confirmación
+    if (mostrarConfirmacion) {
+        AlertDialog(
+            onDismissRequest = {
+                mostrarConfirmacion = false
+            },
+            title = {
+                Text("Eliminar jugador")
+            },
+            text = {
+                Text(
+                    "¿Estás seguro de que quieres eliminar " +
+                            "al jugador $userName?"
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        scope.launch {
+                            val user = userRepository.getUser(userName)
+
+                            if (user != null)userRepository.deleteUser(user)
+
+                            mostrarConfirmacion = false
+
+                            navController.navigate("Login") {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                        }
+                    }
+                ) {
+                    Text("Sí, eliminar")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        mostrarConfirmacion = false
+                    }
+                ) {
+                    Text("Cancelar")
+                }
+            }
+        )
     }
 }
