@@ -3,7 +3,6 @@ package com.example.game
 import androidx.compose.runtime.LaunchedEffect
 import kotlinx.coroutines.delay
 import androidx.compose.foundation.Image
-
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 
@@ -36,37 +35,44 @@ import androidx.navigation.NavController
 import com.example.game.data.UserRepository
 
 @Composable
-fun PantallaJuego(navController: NavController,
-                  userRepository: UserRepository,
-                  nombreUsuario: String){
-
+fun PantallaJuego(
+    navController: NavController,
+    userRepository: UserRepository,
+    nombreUsuario: String
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
     val preguntas = remember {
-        context.resources
-            .openRawResource(R.raw.preguntas)
+        context.resources.openRawResource(R.raw.preguntas)
             .bufferedReader()
             .readText()
             .split(";")
             .filter { it.isNotBlank() }
     }
+
     var points by remember {
         mutableStateOf(0)
     }
+
     var preguntaActual by remember {
         mutableStateOf(0)
     }
-    var seleccionado = remember {
+
+    val seleccionado = remember {
         mutableStateListOf(-1, -1, -1, -1)
     }
+
     var respondida by remember {
         mutableStateOf(false)
     }
-    //variable para el tiempo
+
+    // Variable para el tiempo
     var tiempoRestante by remember {
         mutableStateOf(10)
     }
-    // Espera 1 segundo después de responder
+
+    // Espera un segundo después de responder y avanza
     LaunchedEffect(respondida) {
         if (respondida) {
             delay(1000)
@@ -79,10 +85,14 @@ fun PantallaJuego(navController: NavController,
                 preguntaActual++
                 tiempoRestante = 10
                 respondida = false
+            } else {
+                // Finalizar el juego tras la última pregunta
+                preguntaActual = preguntas.size
             }
         }
     }
-    //evento del temporizador, me daba errores al intentar hacerlo de una
+
+    // Temporizador de cada pregunta
     LaunchedEffect(preguntaActual, respondida) {
         if (!respondida && preguntaActual < preguntas.size) {
             while (tiempoRestante > 0 && !respondida) {
@@ -90,7 +100,9 @@ fun PantallaJuego(navController: NavController,
                 tiempoRestante--
             }
 
-            if (tiempoRestante == 0 && !respondida &&
+            if (
+                tiempoRestante == 0 &&
+                !respondida &&
                 preguntaActual < preguntas.size
             ) {
                 val partes = preguntas[preguntaActual].split("|")
@@ -103,7 +115,6 @@ fun PantallaJuego(navController: NavController,
     }
 
     if (preguntaActual < preguntas.size) {
-
         val partes = preguntas[preguntaActual].split("|")
 
         val pregunta = partes[0]
@@ -129,38 +140,38 @@ fun PantallaJuego(navController: NavController,
             )
 
             Text(
-                pregunta,
+                text = pregunta,
                 modifier = Modifier.padding(20.dp),
                 textAlign = TextAlign.Center
             )
+
             Text(
                 text = "Tiempo: $tiempoRestante",
                 color = if (tiempoRestante <= 3) Color.Red else Color.Unspecified,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
+
             for (j in 0..1) {
                 Row {
                     for (i in 0..1) {
-
                         val boton = j * 2 + i
 
                         Button(
                             onClick = {
-
                                 if (!respondida) {
-                                    seleccionado[boton]++;
-                                    if (boton == correcta){
-                                        points +=(1+tiempoRestante);
-                                        seleccionado[boton]++;
-                                    }
-                                    else{
-                                        seleccionado[correcta]=1;
+                                    if (boton == correcta) {
+                                        points += 1 + tiempoRestante
+                                        seleccionado[boton] = 1
+                                    } else {
+                                        seleccionado[boton] = 0
+                                        seleccionado[correcta] = 1
                                     }
 
-                                    // Marca que ya se ha respondido
+                                    // Marcar pregunta como respondida
                                     respondida = true
                                 }
-                            },colors = ButtonDefaults.buttonColors(
+                            },
+                            colors = ButtonDefaults.buttonColors(
                                 containerColor = when (seleccionado[boton]) {
                                     1 -> Color(0xFF246227)
                                     0 -> Color(0xFFBB291F)
@@ -172,7 +183,7 @@ fun PantallaJuego(navController: NavController,
                                 .size(150.dp, 80.dp)
                         ) {
                             Text(
-                                respuestas[boton],
+                                text = respuestas[boton],
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -180,15 +191,17 @@ fun PantallaJuego(navController: NavController,
                 }
             }
         }
-
     } else {
-        LaunchedEffect(Unit) {
+        LaunchedEffect(nombreUsuario, points) {
             val usuario = userRepository.getUser(nombreUsuario)
 
             if (usuario != null) {
                 val usuarioActualizado = usuario.copy(
                     points = usuario.points + points,
-                    bestScore = maxOf(usuario.bestScore, points.toDouble())
+                    bestScore = maxOf(
+                        usuario.bestScore,
+                        points.toDouble()
+                    )
                 )
 
                 userRepository.updateUser(usuarioActualizado)
@@ -204,15 +217,18 @@ fun PantallaJuego(navController: NavController,
                 text = "¡No quedan más preguntas!\nHas conseguido $points puntos",
                 textAlign = TextAlign.Center
             )
+
             Button(
                 onClick = {
                     navController.navigate("Inicio/$nombreUsuario") {
-                        popUpTo("Juego/$nombreUsuario"){
+                        popUpTo("Juego/$nombreUsuario") {
                             inclusive = true
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Text("Volver al menú de inicio")
             }
