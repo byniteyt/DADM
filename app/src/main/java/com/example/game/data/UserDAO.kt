@@ -19,9 +19,15 @@ interface UserDAO {
     @Delete
     suspend fun delete(user:User)
 
-    @Query("SELECT * FROM users WHERE userName = :name LIMIT 1")
+    @Query("SELECT * FROM Users WHERE userName = :name LIMIT 1")
     suspend fun getUser(name: String): User?
 
-    @Query("SELECT * from users ORDER BY userName ASC")
+    @Query("SELECT * FROM Users WHERE userName = :name LIMIT 1")
+    fun getUserStream(name: String): Flow<User?>
+
+    @Query("SELECT * from Users ORDER BY userName ASC")
     fun getAllUsers(): Flow<List<User>>
+
+    @Query("SELECT * from Users ORDER BY bestScore DESC LIMIT 10")
+    fun getRanking(): Flow<List<User>>
 }
