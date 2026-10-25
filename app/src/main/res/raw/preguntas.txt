@@ -1,3 +1,20 @@
-﻿¿Qué quieres hacer?|Estudiar|Trabajar|Ser feliz|Madrugar|2|alfonso;
-Si tu prima se come 4 pistachos y Alfonso Cuadrado va en moto a la Universidad, ¿Por qué a Cosmin le llaman Nicu y no Miku?|Juan Lorenzo no estoy en primaria|Laura LLopis God|Pancracio|Persona 3 >> Persona 5"|1|dafoe;
-Donde vives?| ET|AHHH, q estoy vivo?|En la luna| no lo hago :’)|3|josh
+﻿¿Quién es este personaje?|Zelda|Incineroar|DK Kong|MegaMan|2|donkeykong;
+¿Quién es este personaje?|Bendy|Cuphead|Sonic|Mickey Mouse|1|cuphead;
+¿Quién es este personaje?|Zero|Guts|Cloud|Diluc|2|cloud;
+¿Quién es este personaje?|Kirby|Carl Cupcake|Slurpuff|Appletun|1|carl;
+¿Quién es este personaje?|Bayonetta|Joker|Mario|Matt|3|matt;
+¿Quién es este personaje?|Eggman|Mametchi|El Penitente|Zombie|3|zombie;
+¿Quién es este personaje?|Hornet|Silence Suzuka|Rey Dedede|Bowser|2|dedede;
+¿Cuál fue el primer videojuego de la historia?|Tennis for Two|Pong|Spacewar|Tetris|0|tennis;
+¿A qué se dedicaba Nintendo antes de la producción de videojuegos?|Fabricación de electrodomésticos|Edición de libros|Producción de naipes|Creación de motores para coches|2|nintendo;
+¿A qué videojuego pertenece este objeto?|Kirby Triple Deluxe|Sonic Frontiers|Zelda Ocarina of Time|Super Mario bros|3|mario;
+¿A qué videojuego pertenece este objeto?|Slingshot Fortress|The Legend of Zelda|Animal Crossing|Angry birds|3|angrybirds;
+¿A qué videojuego pertenece este objeto?|Los sims|Paralives|inZoi|Stardew Valley|0|sims;
+¿A qué videojuego pertenece este personaje?|Sonic Colors|Pokémon Ultra Sol|Angry Birds|Pikmin|0|soniccolors;
+¿A qué videojuego pertenece este personaje?|Inside|Limbo|Little Nightmares|Unravel|2|littlenightmares;
+¿Qué videoconsola es esta?|Nintendo Entertainment System (NES)|Sega Master System|Sega Dreamcast|Nintendo Switch 2|2|dreamcast;
+¿Qué videoconsola es esta?|Play Station Portable (PSP)|Neo Geo|Nintendo 2DS XL|Game Boy Advance|3|gba;
+¿Qué videoconsola es esta?|Rog Ally|Steam Deck|Play Station Portable (PSP)|Wii U|1|steamdeck;
+¿Qué arma tiene este personaje?|Lanza|Mandoble|Arco|Espada|0|lanza;
+¿Qué personaje porta este arma?|Leon S Kennedy|Alice|Kirby|Kano|1|alice;
+¿Qué personaje porta este arma?|Sora|Sonic|Meta Knight|Link|1|sonic;

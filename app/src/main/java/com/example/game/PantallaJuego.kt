@@ -130,13 +130,31 @@ fun PantallaJuego(
             Image(
                 painter = painterResource(
                     when (imagen) {
-                        "alfonso" -> R.drawable.alfonso
-                        "dafoe" -> R.drawable.dafoe
-                        "josh" -> R.drawable.josh
-                        else -> R.drawable.alfonso
+                        "donkeykong" -> R.drawable.donkeykong
+                        "cuphead" -> R.drawable.cuphead
+                        "cloud" -> R.drawable.cloud
+                        "carl" -> R.drawable.carl
+                        "matt" -> R.drawable.matt
+                        "zombie" -> R.drawable.zombie
+                        "dedede" -> R.drawable.dedede
+                        "tennis" -> R.drawable.tennis
+                        "nintendo" -> R.drawable.nintendo
+                        "mario" -> R.drawable.mario
+                        "angrybirds" -> R.drawable.angrybirds
+                        "sims" -> R.drawable.sims
+                        "soniccolors" -> R.drawable.soniccolors
+                        "littlenightmares" -> R.drawable.littlenightmares
+                        "dreamcast" -> R.drawable.dreamcast
+                        "gba" -> R.drawable.gba
+                        "steamdeck" -> R.drawable.steamdeck
+                        "lanza" -> R.drawable.lanza
+                        "alice" -> R.drawable.alice
+                        "sonic" -> R.drawable.sonic
+                        else -> R.drawable.nintendo
                     }
                 ),
-                contentDescription = imagen
+                contentDescription = imagen,
+                modifier = Modifier.size(150.dp).padding(bottom = 16.dp)
             )
 
             Text(
