@@ -76,7 +76,7 @@ fun PantallaLogin(navController: NavController, userRepository: UserRepository) 
                         userRepository.insertUser(newUser)
                         navController.navigate("Inicio/${newUser.userName}")
                     } else {
-                        mensaje = "No hay usuario"
+                        mensaje = "Ya existe este usuario"
                     }
                 }
             }
