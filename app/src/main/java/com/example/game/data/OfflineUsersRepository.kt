@@ -10,7 +10,6 @@ public class OfflineUsersRepository(private var userDao: UserDAO): UserRepositor
 
     override fun getUserStream(name: String): Flow<User?> = userDao.getUserStream(name)
 
-    @Query("SELECT * from Users ORDER BY bestScore DESC LIMIT 10")
     override fun getRanking(): Flow<List<User>> = userDao.getRanking()
 
     override suspend fun insertUser(user: User) = userDao.insert(user)
